@@ -1,0 +1,23 @@
+import telebot
+import random
+from config import TOKEN
+
+bot = telebot.TeleBot(TOKEN)
+
+def generate_prediction():
+    heure = random.randint(1, 12)
+    minute = random.randint(0, 59)
+    coefficient = round(random.uniform(1.5, 3.5), 2)
+    assurance = random.choice(["Active", "Désactivée"])
+    return f"Heure : {heure:02d}:{minute:02d}\nCoef : x{coefficient}\nAssurance : {assurance}"
+
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    bot.reply_to(message, "🎲 Bienvenue sur LuckyJet Bot prédictif ! Tape /prediction pour obtenir une prédiction.")
+
+@bot.message_handler(commands=['prediction'])
+def send_prediction(message):
+    prediction = generate_prediction()
+    bot.reply_to(message, f"📊 Prédiction Lucky Jet :\n{prediction}")
+
+bot.polling()
